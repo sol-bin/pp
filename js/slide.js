@@ -15,6 +15,8 @@
 // })//jq end
 
 
+
+///모달
 $(function(){
   $('.btn button').click(function(){//팝업이 처음부터 닫히게 할려면 css에 display: none 을 준다
     $('#pop_up').hide(); //sildeUP, fadeOut, hide
@@ -38,6 +40,8 @@ $(function(){
     
 })//jq end
 
+
+
 $(function(){
   $('.partner_info').click(function(){
    var img = $(this).find('img');//여러개의 partner_info중에서 하나만 하기 위해서 this를 씀
@@ -56,8 +60,91 @@ $(function(){
   })
 
 
-// https://westzero.tistory.com/112
-String.prototype.toKorChars = function() { 
+  var menu = $(".nav_txt > li");
+  var content = $("section");
+
+
+
+  
+  menu.click(function(){
+      /*preventDefault 는 a 태그 처럼 클릭 이벤트 외에 
+별도의 브라우저 행동을 막기 위해 사용됩니다.*/
+      event.preventDefault();
+      
+      //사용자가 클릭한 li
+      var tg = $(this);
+      //순서값을 찾는 함수 index()
+      var idx = tg.index();
+      //선택한 li와 순서가 같은 content 를 찾음 eq()
+      var section = content.eq(idx);
+      //선택된 영역의 top 의 좌표값을 저장
+      //.offset()은 선택한 요소의 좌표를 가져오거나 특정 좌표로 이동하게 합니다.
+      var tt = section.offset().top;
+
+      //스크롤이 tt의 값에 맞게 움직이게
+      $("html,body").stop().animate({scrollTop:tt});
+      });//menu.click() 끝
+      
+      // 윈도우에서 scroll() 스크롤이 작동될 때 일어날 일.
+      $(window).scroll(function(){
+      //.scrollTop()은 선택한 요소의 스크롤바 수직 위치를 반환하거나 스크롤바 수직 위치를 정합니다.
+      var location = $(window).scrollTop();
+      
+      content.each(function() {
+          //반복문(each)
+    var tg = $(this);
+          var idx = tg.index();
+          
+          if(tg.offset().top <= location){  //active 위치가 안맞으면 location + 위치값 을 추가하면 됨
+              menu.removeClass("active");
+              menu.eq(idx).addClass("active");
+              }
+
+  });//each() 끝
+      
+          
+          });//scroll() 끝
+
+
+});
+
+let removeTimeOut;
+
+function clickPosition(e) {
+  const target = document.getElementById("clickEffect"),
+    a = 40; // #clickEffect의 너비 & 높이 값 / 2
+
+  (e.button === 0) && (
+    target.style.transform = `translate(${e.clientX - a}px, ${e.clientY - a}px)`,
+    target.classList.contains("effect")
+    ? (
+      clearTimeout(removeTimeOut),
+      target.classList.remove("effect"),
+      void target.offsetWidth,
+      target.classList.add("effect"),
+      removeEffect()
+    )
+    : (
+      target.classList.add("effect"),
+      removeEffect()
+    )
+  )
+}
+
+function removeEffect() {
+  removeTimeOut = setTimeout(function () {
+    document.getElementById("clickEffect").classList.remove("effect")
+  }, 500) // #clickEffect.effect::after의 시간 (.5s) * 1000
+}
+
+document.addEventListener("mousedown", clickPosition)
+
+
+
+
+ // https://westzero.tistory.com/112
+ //초성중성종성을 나누는 함수 
+ String.prototype.toKorChars = function() { 
   var cCho = [ 'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ' ], 
   cJung = [ 'ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ' ], 
   cJong = [ '', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ' ], cho, jung, jong; 
@@ -90,8 +177,10 @@ String.prototype.toKorChars = function() {
       //     chars.push(cJong[jong]); 
       //     } 
 
-
-      //  테스트라는 문장이 있으면 ㅌ테ㅅ스ㅌ트 형식으로 저장되도록함 (타이핑을 위해서)
+// 이부분을 원하는 방향으로 바꿈.
+      // 테스트라는 문장이 
+      // ㅌ,ㅔ,ㅅ,-,ㅌ,- 형식으로 저장되던 코드를 
+      // ㅌ,테,ㅅ,스,ㅌ,트 형식으로 저장되도록함 (타이핑효과를 위해서)
       chars.push(cCho[cho]);
       chars.push(String.fromCharCode( 44032 + (cho * 588) + (jung  * 28)));
       if (cJong[jong] !== '') { 
@@ -109,15 +198,15 @@ var result  = "모든 포트폴리오는 개인작업으로 만들어 졌습니�
 var typeing1=[];
 result = result.split(''); // 한글자씩자름
 
-//각글자 초성,중성,종성으로 나눔
+//각글자 초성,중성,종성으로 나눠서 배열로 저장함.
 for(var i =0; i<result.length; i++){
   typeing1[i]=result[i].toKorChars();
 }
 
-//출력할 엘리먼트요소 가져옴 
+//출력할 엘리먼트요소 가져옴 -result클래스에 출력
 var resultDiv = document.getElementsByClassName("result")[0];
 
-//
+
 var text = "";
 var i=0; 
 var j=0; 
@@ -138,7 +227,9 @@ function typi(){
       resultDiv.innerHTML = text + typeing1[i][j];
       j++;
       if(j==jmax){
-          text+=  typeing1[i][j-1];//초성중성종성 순서대로 출력된 글자는 저장 ( 다음 글자와 이어붙이기 위해서 )
+          text+=  typeing1[i][j-1];
+          //초성중성종성 순서대로 출력된 후 글자는 저장 ( 다음 글자와 이어붙이기 위해서 )
+         
           i++;
           j=0;
       }
@@ -146,9 +237,18 @@ function typi(){
       clearInterval(inter);
   }
 }
-})
 
 
 
 
 
+
+
+$(function(){
+  // 
+  var duration = 300;
+
+  // typo ----------------------------------------
+  $('#typo').typoShadow();
+
+});

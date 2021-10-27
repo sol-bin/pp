@@ -46,7 +46,7 @@ button{outline:0}
 
 /*********************header****************************/
 
-#header{width:100%;padding-top: 40px;}
+#header{width:100%;padding-top: 40px;position: relative;}
 #header .logo_box{
       width: 100%;
       text-align: center;
